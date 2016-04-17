@@ -7,13 +7,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.siddhant.bvplibrary.SignInOrRegister">
+    tools:context="com.example.siddhant.bvplibrary.SignInOrRegister"
+                android:background="#d9d1c2">
 
     <ImageView
-        android:layout_width="100dp"
+        android:layout_width="200dp"
         android:layout_height="100dp"
         android:id="@+id/imageView2"
-        android:src="@drawable/bg"
+        android:src="@drawable/logo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp" />
@@ -68,26 +69,28 @@
         android:layout_above="@+id/button3"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="signIn" />
+        android:onClick="signIn"
+        android:background="@drawable/buttons"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="New to BVP Library? Create an account"
         android:id="@+id/button3"
-        android:layout_above="@+id/button4"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="createAccount" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Skip sign in"
-        android:id="@+id/button4"
+        android:onClick="createAccount"
+        android:background="@drawable/buttons"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="skipSignIn" />
+        android:onClick="skipSignIn"/>
 
 </RelativeLayout>

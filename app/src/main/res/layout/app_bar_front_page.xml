@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.siddhant.bvcoelibrary.FrontPage">
+    tools:context="com.example.siddhant.bvcoelibrary.FrontPage"
+                                                 android:background="#d9d1c2">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

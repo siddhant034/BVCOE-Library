@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#a8dd53"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/bookImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft = "5dp"
+        android:layout_alignParentTop="true"
+        android:src="@android:drawable/sym_def_app_icon" />
+
+    <TextView
+        android:id="@+id/book_name"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bookImage"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="Book name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/book_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bookImage"
+        android:layout_below="@+id/book_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="Author :"
+        android:textColor="#000000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/book_authorvalue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/book_author"
+        android:layout_below="@+id/book_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="Siddhant Shekhar"
+        android:textColor="#000000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/book_edition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/book_authorvalue"
+        android:layout_below="@+id/book_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:text="Edition :"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/book_editionvalue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/book_edition"
+        android:layout_below="@+id/book_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="7"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:textSize="14dp" />
+
+    <Button
+        android:id="@+id/issue"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        
+        android:layout_alignParentRight="true"
+        android:layout_marginRight ="10dp"
+        android:gravity="center"
+        android:drawableLeft="@drawable/ic_menu_manage"
+        style="?android:attr/borderlessButtonStyle" />
+
+</RelativeLayout>  

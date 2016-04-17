@@ -8,12 +8,25 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class NewAccount extends AppCompatActivity {
     private NewAccount.UserLoginTask mAuthTask = null;
@@ -25,6 +38,7 @@ public class NewAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_account);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         Name = (EditText)findViewById(R.id.name);
         Email = (EditText)findViewById(R.id.email);
@@ -34,8 +48,6 @@ public class NewAccount extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
     }
 
     public void takeToSignIn(View v)
@@ -190,14 +202,44 @@ public class NewAccount extends AppCompatActivity {
 
     }
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-        final String mRoll, mName, mPassword, mEmail;
         View fv;
+        JSONObject postData = new JSONObject();
+        Boolean status=false;
+        InputStream is = null;
+        String result="";
+        String url = "http://shrouded-island-99834.herokuapp.com/api/student/register";
+
         UserLoginTask(String name, String roll, String email, String password, View v) {
-            mEmail = email;
-            mPassword = password;
-            mName = name;
-            mRoll = roll;
-            fv=v;
+            String branch;
+            if(roll.charAt(7)=='2' && roll.charAt(8)=='7')
+                branch="CSE";
+            else if(roll.charAt(7)=='2' && roll.charAt(8)=='8')
+                branch="ECE";
+            else if(roll.charAt(7)=='3' && roll.charAt(8)=='1')
+                branch="IT";
+            else if(roll.charAt(7)=='4' && roll.charAt(8)=='9')
+                branch="EEE";
+            else
+                branch="ICE";
+
+            int year;
+            year=roll.charAt(roll.length()-2)-'0';
+            year*=10;
+            year+=roll.charAt(roll.length()-1)-'0';
+
+            try
+            {
+                postData.put("studentEmail", email);
+                postData.put("studentRollnumber", roll);
+                postData.put("password", password);
+                postData.put("studentName", name);
+                postData.put("branch", branch);
+                postData.put("semester", (16 - year) * 2);
+                postData.put("year", year);
+            }
+            catch(Exception e)
+            {
+            }
         }
         @Override
         protected Boolean doInBackground(Void... params)
@@ -206,14 +248,42 @@ public class NewAccount extends AppCompatActivity {
             // Simulate network access.
             try
             {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(url);
+                String json = "";
+                json = postData.toString();
+                StringEntity se = new StringEntity(json);
+                httpPost.setEntity(se);
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-type", "application/json");
+                HttpResponse httpResponse = httpclient.execute(httpPost);
+                is = httpResponse.getEntity().getContent();
+                if(is != null) {
+                    result = convertInputStreamToString(is);
+                    JSONObject jObj = new JSONObject(result);
+                    status = jObj.getBoolean("status");
+                    result=jObj.getString("result");
+                }
+                Thread.sleep(3000);
             }
             catch (Exception e)
             {
-                return false;
+                e.printStackTrace();
             }
             return status;
         }
-        // TODO: register the new account here
+
+        private String convertInputStreamToString(InputStream inputStream) throws IOException
+        {
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+            String line;
+            String result = "";
+            while((line = bufferedReader.readLine()) != null)
+                result += line;
+            inputStream.close();
+            return result;
+
+        }
 
 
         @Override
@@ -223,12 +293,12 @@ public class NewAccount extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(),"Holalua",Toast.LENGTH_LONG).show();
 
             if (success) {
-
+                Toast.makeText(getApplicationContext(),"Account created successfully",Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(i);
             }
             else{
-                //Email.setError(getString(R.string.error_invalid_email));
-                //focusView = Email;
-                //cancel = true;
+                Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
             }
         }
 

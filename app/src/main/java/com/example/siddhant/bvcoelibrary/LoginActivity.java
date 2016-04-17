@@ -23,6 +23,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -30,14 +31,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -81,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -257,12 +257,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            //mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    // mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
                 }
             });
 
@@ -272,13 +273,106 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    //mProgressView.setVisibility(View.GONE);
                 }
             });
+
+            TextView tv = (TextView)findViewById(R.id.textView5);
+            //tv.setVisibility(show ? View.GONE : View.VISIBLE);
+            tv.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+
+            tv = (TextView)findViewById(R.id.showpassword);
+            //tv.setVisibility(show ? View.GONE : View.VISIBLE);
+            tv.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //   mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+            tv = (TextView)findViewById(R.id.textView6);
+            //tv.setVisibility(show ? View.GONE : View.VISIBLE);
+            tv.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //   mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+            CheckBox cb = (CheckBox)findViewById(R.id.checkBox);
+            //cb.setVisibility(show ? View.GONE : View.VISIBLE);
+            cb.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+
+            Button b = (Button)findViewById(R.id.button5);
+            //b.setVisibility(show ? View.GONE : View.VISIBLE);
+            b.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //  mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+            b = (Button)findViewById(R.id.signIn);
+            // b.setVisibility(show ? View.GONE : View.VISIBLE);
+            b.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+            b = (Button)findViewById(R.id.button7);
+            //  b.setVisibility(show ? View.GONE : View.VISIBLE);
+            b.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+            View v = (View)findViewById(R.id.br);
+            //v.setVisibility(show ? View.GONE : View.VISIBLE);
+            v.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    //mLoginFormView.setVisibility(View.GONE);
+                }
+            });
+
+
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            //   mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            // mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -344,88 +438,60 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private String ans="Not changed";
+        JSONObject postData = new JSONObject();
+        Boolean status=false;
+        InputStream is = null;
+        String result="";
+
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            try {
+                postData.put("studentEmail", mEmail);
+                postData.put("password", mPassword);
+            }
+            catch(Exception e)
+            {
+            }
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-            InputStream inputStream = null;
-            String result = "";
-            Boolean status=false;
             String url = "http://shrouded-island-99834.herokuapp.com/api/student/login";
             try
             {
-                // Simulate network access.
                 HttpClient httpclient = new DefaultHttpClient();
-                ans="1";
-                // 2. make POST request to the given URL
                 HttpPost httpPost = new HttpPost(url);
-                ans="2";
                 String json = "";
-
-                // 3. build jsonObject
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("studentEmail", mEmail);
-                jsonObject.accumulate("password", mPassword);
-                //jsonObject.accumulate("twitter", person.getTwitter());
-                ans="3";
-                // 4. convert JSONObject to JSON to String
-                json = jsonObject.toString();
-                ans="4";
-
-                // ** Alternative way to convert Person object to JSON string usin Jackson Lib
-                 //ObjectMapper mapper = new ObjectMapper();
-                 //json = mapper.writeValueAsString(person);
-
-                // 5. set json to StringEntity
+                json = postData.toString();
                 StringEntity se = new StringEntity(json);
-                ans="5";
-                // 6. set httpPost Entity
                 httpPost.setEntity(se);
-                ans="6";
-                // 7. Set some headers to inform server about the type of the content
                 httpPost.setHeader("Accept", "application/json");
                 httpPost.setHeader("Content-type", "application/json");
-                ans="7";
-                // 8. Execute POST request to the given URL
                 HttpResponse httpResponse = httpclient.execute(httpPost);
-                ans="8";
-                // 9. receive response as inputStream
-                inputStream = httpResponse.getEntity().getContent();
-                ans="9";
-                // 10. convert inputstream to string
-                if(inputStream != null) {
-                    result = convertInputStreamToString(inputStream);
-                    JSONArray mArray = new JSONArray(result);
-                    JSONObject jObj = mArray.getJSONObject(0);
+                is = httpResponse.getEntity().getContent();
+                if(is != null) {
+                    result = convertInputStreamToString(is);
+                    JSONObject jObj = new JSONObject(result);
                     status = jObj.getBoolean("status");
-                    ans="changed";
                 }
-                else {
-                    ans="Did not work";
-                }
-                ans="10";
                 Thread.sleep(3000);
             }
             catch (Exception e)
             {
-                    ans="catched";
+                e.printStackTrace();
             }
             return status;
         }
 
         private String convertInputStreamToString(InputStream inputStream) throws IOException {
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-            String line = "";
+            String line;
             String result = "";
             while((line = bufferedReader.readLine()) != null)
                 result += line;
-
             inputStream.close();
             return result;
 
@@ -440,7 +506,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent i = new Intent(getApplicationContext(),FrontPage.class);
                 startActivity(i);
             } else {
-                Toast.makeText(getApplicationContext(),ans,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),b,Toast.LENGTH_LONG).show();
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

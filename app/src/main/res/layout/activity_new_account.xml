@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.siddhant.bvcoelibrary.NewAccount">
+    tools:context="com.example.siddhant.bvcoelibrary.NewAccount"
+                android:background="#d9d1c2">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -19,14 +20,15 @@
         android:layout_gravity="center" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Sign Up"
         android:id="@+id/textView5"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="140dp"/>
 
     <ScrollView
         android:id="@+id/login_form"
@@ -134,7 +136,8 @@
         android:onClick="attemptLogin"
         android:layout_below="@+id/login_form"
         android:layout_toRightOf="@+id/login_progress"
-        android:layout_toEndOf="@+id/login_progress" />
+        android:layout_toEndOf="@+id/login_progress"
+        android:background="@drawable/buttons"/>
 
     <Button
         android:layout_width="wrap_content"
