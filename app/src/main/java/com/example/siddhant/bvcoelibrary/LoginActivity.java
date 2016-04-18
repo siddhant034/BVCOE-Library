@@ -442,6 +442,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Boolean status=false;
         InputStream is = null;
         String result="";
+        String sessionId;
 
 
         UserLoginTask(String email, String password) {
@@ -476,6 +477,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     result = convertInputStreamToString(is);
                     JSONObject jObj = new JSONObject(result);
                     status = jObj.getBoolean("status");
+                    sessionId=jObj.getString("sessionId");
                 }
                 Thread.sleep(3000);
             }
@@ -504,6 +506,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 Intent i = new Intent(getApplicationContext(),FrontPage.class);
+                i.putExtra("sessionId",sessionId);
                 startActivity(i);
             } else {
                 //Toast.makeText(getApplicationContext(),b,Toast.LENGTH_LONG).show();

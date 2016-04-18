@@ -2,6 +2,7 @@ package com.example.siddhant.bvcoelibrary;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,14 +19,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class FrontPage extends AppCompatActivity
@@ -37,12 +48,16 @@ public class FrontPage extends AppCompatActivity
 
     ArrayList<Book> bookResults = new ArrayList<Book>();
     ArrayList<Book> filteredBookResults = new ArrayList<Book>();
+    String sessionId;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
+        i = getIntent();
+        sessionId = i.getStringExtra("sessionId");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -109,6 +124,7 @@ public class FrontPage extends AppCompatActivity
         String textSearch;
         ProgressDialog pd;
         JSONParser jsonParser = new JSONParser();
+        Boolean status;
 
         @Override
         protected void onPreExecute()
@@ -158,12 +174,13 @@ public class FrontPage extends AppCompatActivity
             {
                 JSONObject json = jsonParser.getJSONFromUrl(url);
                 bookList = json.getJSONArray("result");
-
+                status = json.getBoolean("status");
+                if(!status)
+                    return ("No result");
                 for (int i = 0; i < bookList.length(); i++)
                 {
                     tempBook = new Book();
                     JSONObject obj = bookList.getJSONObject(i);
-
                     tempBook.setbookName(obj.getString("name"));
                     tempBook.setbookAuthor(obj.getString("author"));
                     tempBook.setbookDepartment(obj.getString("domain"));
@@ -174,7 +191,7 @@ public class FrontPage extends AppCompatActivity
 
                     for (int j = 0; j < bookResults.size(); j++)
                     {
-                        if (bookResults.get(j).getbookEdition().equals(tempBook.getbookEdition()))
+                        if (bookResults.get(j).getbookEdition().equals(tempBook.getbookEdition()))   //edition used as book id
                         {
                             matchFound = "Y";
                         }
@@ -203,6 +220,11 @@ public class FrontPage extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
                 pd.dismiss();
             }
+            else if(s.equalsIgnoreCase("No result"))
+            {
+                Toast.makeText(getApplicationContext(), "No results found", Toast.LENGTH_LONG).show();
+                pd.dismiss();
+            }
             else
             {
                 filterBookArray(textSearch);
@@ -210,6 +232,11 @@ public class FrontPage extends AppCompatActivity
                 pd.dismiss();
             }
         }
+
+        /*public void issue(View view)
+        {
+
+        }*/
     }
 
     @Override
@@ -266,8 +293,11 @@ public class FrontPage extends AppCompatActivity
                 convertView = layoutInflater.inflate(R.layout.books_layout, null);
                 holder = new ViewHolder();
                 holder.book_name = (TextView) convertView.findViewById(R.id.book_name);
-                holder.book_edition = (TextView) convertView.findViewById(R.id.book_edition);
+                holder.book_edition_value = (TextView) convertView.findViewById(R.id.book_editionvalue);
+                holder.book_author_value = (TextView) convertView.findViewById(R.id.book_authorvalue);
                 holder.book_author = (TextView) convertView.findViewById(R.id.book_author);
+                holder.book_edition = (TextView)convertView.findViewById(R.id.book_edition);
+                holder.Issue = (Button)convertView.findViewById(R.id.issue);
                 convertView.setTag(holder);
             }
             else
@@ -276,10 +306,103 @@ public class FrontPage extends AppCompatActivity
             }
 
             holder.book_name.setText(tempBook.getbookName());
-            holder.book_edition.setText(tempBook.getbookEdition());
-            holder.book_author.setText(tempBook.getBookAuthor());
+            holder.book_edition_value.setText(tempBook.getbookEdition());
+            holder.book_author_value.setText(tempBook.getBookAuthor());
+            holder.book_author.setText("Author: ");
+            holder.book_edition.setText("Edition:");
+            holder.Issue.setOnClickListener(new BookIssueClickListener("button_issueBook",tempBook,context));
             return convertView;
         }
+
+        public class BookIssueClickListener implements View.OnClickListener
+        {
+            String button_name;
+            Book book_name;
+            int tempQty;
+            int tempValue;
+            Context context;
+            InputStream is;
+            Boolean status=false;
+            String result;
+            String url = "https://shrouded-island-99834.herokuapp.com/api/student/issue";
+            JSONObject postData = new JSONObject();
+
+            public BookIssueClickListener(String button_name, Book book_name,Context context)
+            {
+                this.book_name=book_name;
+                this.button_name=button_name;
+                this.context=context;
+            }
+
+            @Override
+            public void onClick(View v)
+            {
+                class m2AsyncTask extends AsyncTask<Void, Void, Boolean>
+                {
+                    @Override
+                    protected Boolean doInBackground(Void... params)
+                    {
+                        try
+                        {
+                            postData.put("bookId", book_name.getbookEdition());                  //replace getBookEdition with getBookId
+                        } catch (Exception e)
+                        {
+                        }
+                        try
+                        {
+                            HttpClient httpclient = new DefaultHttpClient();
+                            HttpPost httpPost = new HttpPost(url);
+                            String json = "";
+                            json = postData.toString();
+                            StringEntity se = new StringEntity(json);
+                            httpPost.setEntity(se);
+                            httpPost.setHeader("sessionId", sessionId);
+                            httpPost.setHeader("Content-type", "application/json");
+                            HttpResponse httpResponse = httpclient.execute(httpPost);
+                            is = httpResponse.getEntity().getContent();
+                            if (is != null)
+                            {
+                                result = convertInputStreamToString(is);
+                                JSONObject jObj = new JSONObject(result);
+                                status = jObj.getBoolean("status");
+                            }
+                            Thread.sleep(3000);
+                        } catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean success)
+                    {
+                        super.onPostExecute(success);
+                        if (success)
+                        {
+                            Toast.makeText(getApplicationContext(), "Book has been Issued", Toast.LENGTH_LONG).show();
+                        } else
+                        {
+                            Toast.makeText(getApplicationContext(), "You have already issued this book", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }
+
+            private String convertInputStreamToString(InputStream inputStream) throws IOException
+            {
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+                String line;
+                String result = "";
+                while((line = bufferedReader.readLine()) != null)
+                    result += line;
+                inputStream.close();
+                return result;
+
+            }
+        }
+
 
     }
 
@@ -301,7 +424,8 @@ public class FrontPage extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
+            Intent i = new Intent(this,SignInOrRegister.class);
+            startActivity(i);
             return true;
         }
 
@@ -316,7 +440,9 @@ public class FrontPage extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.books_issued) {
-            // Handle the camera action
+            i = new Intent(this,BooksIssued.class);
+            i.putExtra("sessionId",sessionId);
+            startActivity(i);
         } else if (id == R.id.fine) {
 
         } else if (id == R.id.history) {
@@ -334,6 +460,12 @@ public class FrontPage extends AppCompatActivity
     {
         TextView book_name;
         TextView book_author;
+        TextView book_author_value;
         TextView book_edition;
+        TextView book_edition_value;
+        Button Issue;
     }
+
+
+
 }

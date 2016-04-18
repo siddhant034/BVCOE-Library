@@ -4,7 +4,9 @@
     android:background="#a8dd53"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+                android:clickable="true"
+                android:contextClickable="false">
 
 
     <ImageView
@@ -40,7 +42,9 @@
         android:text="Author :"
         android:textColor="#000000"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:editable="false"
+        android:elegantTextHeight="false"/>
 
     <TextView
         android:id="@+id/book_authorvalue"
@@ -89,7 +93,10 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight ="10dp"
         android:gravity="center"
-        android:drawableLeft="@drawable/ic_menu_manage"
-        style="?android:attr/borderlessButtonStyle" />
+        style="?android:attr/borderlessButtonStyle"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:background="@android:drawable/btn_plus"
+        android:onClick="issue"/>
 
 </RelativeLayout>  
